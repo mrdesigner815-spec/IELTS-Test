@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mindproo | AI IELTS for UKVI Practice Test</title>
+<style>
+:root{--ink:#10233f;--blue:#2563eb;--cyan:#06b6d4;--bg:#eef7ff;--card:#fff;--good:#15803d;--bad:#b91c1c}
+*{box-sizing:border-box} body{margin:0;font-family:Inter,Arial,sans-serif;color:var(--ink);background:radial-gradient(circle at 10% 10%,#dff7ff,transparent 30%),linear-gradient(135deg,#eef6ff,#f8fbff)}
+header{padding:18px 6%;display:flex;justify-content:space-between;align-items:center}.brand{font-size:28px;font-weight:900;letter-spacing:.5px}.pill{background:#e0f2fe;padding:8px 14px;border-radius:999px;font-weight:700}
+main{max-width:1000px;margin:auto;padding:15px 20px 50px}.screen{display:none}.screen.active{display:block}.hero,.card{background:rgba(255,255,255,.95);border:1px solid #dbeafe;border-radius:24px;box-shadow:0 16px 45px #2563eb18;padding:28px;margin:15px 0}
+h1{font-size:clamp(32px,5vw,58px);margin:.2em 0}.sub{font-size:18px;color:#49627e}.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}.field label{font-weight:800;display:block;margin:8px 0}.field input{width:100%;padding:15px;border:2px solid #dbeafe;border-radius:14px;font-size:16px}
+button{border:0;border-radius:14px;padding:14px 20px;font-weight:900;font-size:16px;cursor:pointer;background:linear-gradient(90deg,var(--blue),var(--cyan));color:white}.secondary{background:#e8f0ff;color:#17365f}.topline{display:flex;justify-content:space-between;gap:10px;align-items:center}.progress{height:10px;background:#e5edf8;border-radius:20px;overflow:hidden;margin:15px 0}.bar{height:100%;width:0;background:linear-gradient(90deg,var(--blue),var(--cyan));transition:.3s}
+.q{padding:18px 0;border-top:1px solid #e7eef8}.q:first-child{border-top:0}.q strong{font-size:18px}.opts label{display:block;padding:11px 13px;border:1px solid #dbeafe;border-radius:12px;margin:8px 0;cursor:pointer}.opts label:hover{background:#eff8ff}
+.scene{min-height:270px;border-radius:22px;background:linear-gradient(#a9ddff 0 55%,#9ee493 55%);position:relative;overflow:hidden;margin:15px 0}.sun{position:absolute;width:70px;height:70px;border-radius:50%;background:#ffd54f;right:50px;top:35px}.house{position:absolute;width:210px;height:125px;background:#fff1d6;left:90px;bottom:35px;border:5px solid #7b4c2e}.roof{position:absolute;border-left:125px solid transparent;border-right:125px solid transparent;border-bottom:95px solid #d35d4d;left:70px;bottom:160px}.tree{position:absolute;width:38px;height:105px;background:#8b5a2b;right:170px;bottom:25px}.tree:before{content:"";position:absolute;width:125px;height:125px;border-radius:50%;background:#4caf50;left:-43px;top:-70px}.kid{position:absolute;left:390px;bottom:35px;font-size:90px}.dog{position:absolute;left:510px;bottom:35px;font-size:65px}
+textarea{width:100%;min-height:130px;padding:14px;border:2px solid #dbeafe;border-radius:14px;font-size:16px}.rubric{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.rubric div{background:#f2f8ff;padding:12px;border-radius:12px}.score{font-size:70px;font-weight:900;color:var(--blue)}.pass{color:var(--good)}.fail{color:var(--bad)}
+.certificate{border:10px double #17365f;background:white;padding:42px;text-align:center;max-width:850px;margin:20px auto}.certificate h2{font-family:Georgia,serif;font-size:45px;margin:5px}.sig{font-family:cursive;font-size:34px;margin-top:25px}.small{font-size:13px;color:#64748b}
+@media(max-width:650px){.grid,.rubric{grid-template-columns:1fr}.kid{left:45%}.dog{left:70%}}
+@media print{body *{visibility:hidden}.certificate,.certificate *{visibility:visible}.certificate{position:absolute;left:0;top:0;width:100%;border:8px double #111}.no-print{display:none!important}}
+</style>
+</head>
+<body>
+<header><div class="brand">Mindproo</div><div class="pill">AI IELTS for UKVI • Practice</div></header>
+<main>
+<section id="start" class="screen active">
+ <div class="hero">
+  <div class="pill" style="display:inline-block">40 marks • 4 sections</div>
+  <h1>AI IELTS for UKVI<br>Interactive Practice Test</h1>
+  <p class="sub">Grammar 10 • Daily Vocabulary 10 • Listening 10 • Picture Speaking 10</p>
+  <div class="grid">
+   <div class="field"><label>Student Name *</label><input id="name" required placeholder="Enter full name"></div>
+   <div class="field"><label>School *</label><input id="school" required placeholder="Enter school name"></div>
+  </div>
+  <p id="startError" class="fail"></p>
+  <button onclick="startTest()">START TEST</button>
+ </div>
+</section>
+
+<section id="test" class="screen">
+ <div class="card">
+  <div class="topline"><b id="sectionTitle">Grammar</b><span id="counter"></span></div>
+  <div class="progress"><div id="bar" class="bar"></div></div>
+  <div id="questions"></div>
+  <div class="topline"><button class="secondary" onclick="prevSection()">Back</button><button onclick="nextSection()">Next Section</button></div>
+ </div>
+</section>
+
+<section id="listening" class="screen">
+ <div class="card">
+  <div class="topline"><b>Section 3 • Listening</b><span>10 marks</span></div>
+  <p>Press <b>Play Listening</b>. You may replay the short practice recording.</p>
+  <button onclick="playListening()">🔊 Play Listening</button>
+  <div id="listenQs"></div>
+  <div class="topline"><button class="secondary" onclick="showScreen('test');renderSection(1)">Back</button><button onclick="openSpeaking()">Speaking Section</button></div>
+ </div>
+</section>
+
+<section id="speaking" class="screen">
+ <div class="card">
+  <div class="topline"><b>Section 4 • Describe the Picture</b><span>10 marks</span></div>
+  <p>Look at the cartoon-style scene. Speak for about 30–60 seconds. Mention the place, people/animals, actions, objects and your opinion.</p>
+  <div class="scene" aria-label="Cartoon scene of a child and dog outside a house"><div class="sun"></div><div class="roof"></div><div class="house"></div><div class="tree"></div><div class="kid">🧒</div><div class="dog">🐕</div></div>
+  <div class="card" style="background:#f7fbff">
+    <h3>🎙️ Record Your Speaking Answer</h3>
+    <p>Press <b>Open Microphone & Record</b>. Your browser will ask for microphone permission. Choose <b>Allow</b>, speak clearly, then press <b>Stop Recording</b>.</p>
+    <button id="recordBtn" onclick="startRecording()">🎙️ Open Microphone & Record</button>
+    <button id="stopBtn" class="secondary" onclick="stopRecording()" disabled>⏹ Stop Recording</button>
+    <p id="recordStatus" class="small">Microphone is not active yet.</p>
+    <audio id="recordingPlayback" controls style="width:100%;display:none;margin-top:12px"></audio>
+    <div id="speechFeedback" style="margin-top:14px"></div>
+  </div>
+  <h3>Speaking criteria • 10 marks</h3>
+  <div class="rubric"><div><b>Task completion — 2</b><br>Relevant picture details.</div><div><b>Fluency — 2</b><br>Connected, understandable speech.</div><div><b>Vocabulary — 2</b><br>Useful descriptive words.</div><div><b>Grammar — 2</b><br>Clear sentence structures.</div><div><b>Clarity — 2</b><br>Speech is easy to follow.</div></div>
+  <p class="small">The browser provides an automated practice estimate from the transcript. It is not an official IELTS examiner score.</p>
+  <div class="topline"><button class="secondary" onclick="showScreen('listening')">Back</button><button onclick="finishTest()">FINISH & GET RESULT</button></div>
+ </div>
+</section>
+
+<section id="result" class="screen">
+ <div class="card" style="text-align:center">
+  <h2>Test Result</h2><div id="score" class="score"></div><h3 id="status"></h3><div id="breakdown"></div>
+  <div id="certWrap"></div>
+  <button class="no-print" id="printBtn" style="display:none" onclick="window.print()">Export / Print Certificate</button>
+  <button class="secondary no-print" onclick="location.reload()">Take Test Again</button>
+ </div>
+</section>
+</main>
+<script>
+const grammar=[
+["I ___ from Saudi Arabia.",["am","is","are"],0],["She ___ English every day.",["study","studies","studying"],1],
+["They ___ at school now.",["are","is","am"],0],["Yesterday, we ___ to the park.",["go","went","gone"],1],
+["He can ___ English.",["speaks","speak","speaking"],1],["There ___ two books on the table.",["is","are","am"],1],
+["I have lived here ___ two years.",["for","since","at"],0],["This bag is ___ than that one.",["big","bigger","biggest"],1],
+["If it rains, I ___ at home.",["stay","will stay","stayed"],1],["Have you ___ your homework?",["finish","finished","finishing"],1]];
+const vocab=[
+["You buy medicine at a ___.",["pharmacy","library","station"],0],["If you are very tired, you need to ___.",["rest","shout","borrow"],0],
+["A person who teaches students is a ___.",["teacher","driver","chef"],0],["The opposite of 'expensive' is ___.",["cheap","heavy","quiet"],0],
+["You use an umbrella when it is ___.",["rainy","hungry","early"],0],["If you miss the bus, you may be ___.",["late","delicious","empty"],0],
+["A 'neighbour' lives ___ you.",["near","inside","under"],0],["To 'borrow' means to take something and ___.",["return it later","break it","sell it"],0],
+["A supermarket is a place to buy ___.",["groceries","lessons","tickets only"],0],["If a room is 'crowded', it has ___ people.",["many","no","two only"],0]];
+const listen=[
+["Where is Omar going?",["Library","Supermarket","Hospital"],0],["What time does it open?",["8:00","9:00","10:00"],1],
+["What does he need first?",["A book","A bus card","A jacket"],1],["How will he travel?",["By bus","By train","On foot"],0],
+["What is the weather like?",["Rainy","Sunny","Snowy"],1],["Who will meet Omar?",["His teacher","His friend Ali","His brother"],1],
+["Where will they meet?",["At the bus stop","At school","At a café"],0],["What will they do after the library?",["Go home","Have lunch","Play football"],1],
+["What food is mentioned?",["Pizza","Rice","Sandwiches"],2],["When will Omar return home?",["Before 1","Around 2","After 5"],1]];
+let answers={g:Array(10).fill(null),v:Array(10).fill(null),l:Array(10).fill(null)}, sec=0;
+function showScreen(id){document.querySelectorAll('.screen').forEach(x=>x.classList.remove('active'));document.getElementById(id).classList.add('active');scrollTo(0,0)}
+function startTest(){if(!document.getElementById('name').value.trim()||!document.getElementById('school').value.trim()){document.getElementById('startError').textContent="Please complete Name and School before starting.";return} showScreen('test');renderSection(0)}
+function renderSection(s){sec=s;const data=s===0?grammar:vocab, key=s===0?'g':'v';document.getElementById('sectionTitle').textContent=`Section ${s+1} • ${s===0?'Grammar':'Daily Vocabulary'} • 10 marks`;document.getElementById('counter').textContent=`${s+1}/4`;document.getElementById('bar').style.width=((s+1)/4*100)+'%';
+document.getElementById('questions').innerHTML=data.map((q,i)=>`<div class="q"><strong>${i+1}. ${q[0]}</strong><div class="opts">${q[1].map((o,j)=>`<label><input type="radio" name="${key}${i}" ${answers[key][i]===j?'checked':''} onchange="answers.${key}[${i}]=${j}"> ${o}</label>`).join('')}</div></div>`).join('')}
+function nextSection(){if(sec===0)renderSection(1);else{showScreen('listening');renderListening()}}
+function prevSection(){if(sec===1)renderSection(0);else showScreen('start')}
+function renderListening(){document.getElementById('listenQs').innerHTML=listen.map((q,i)=>`<div class="q"><strong>${i+1}. ${q[0]}</strong><div class="opts">${q[1].map((o,j)=>`<label><input type="radio" name="l${i}" ${answers.l[i]===j?'checked':''} onchange="answers.l[${i}]=${j}"> ${o}</label>`).join('')}</div></div>`).join('')}
+function playListening(){const text="Omar is going to the library on Saturday. It opens at nine o'clock. First, he needs to top up his bus card. He will take the bus because the weather is sunny but the library is far from his house. His friend Ali will meet him at the bus stop. After visiting the library, they will have lunch together. Omar plans to bring sandwiches. He expects to return home around two o'clock.";speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(text);u.lang='en-GB';u.rate=.82;speechSynthesis.speak(u)}
+function openSpeaking(){showScreen('speaking')}
+let mediaRecorder=null, audioChunks=[], recordedBlob=null, hiddenTranscript="", recognition=null, recordStartedAt=0;
+async function startRecording(){
+  const status=document.getElementById('recordStatus');
+  if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !window.MediaRecorder){
+    status.innerHTML="<span class='fail'>This browser cannot record audio. Please use a current Chrome, Edge, or Safari browser and allow microphone access.</span>";
+    return;
+  }
+  try{
+    const stream=await navigator.mediaDevices.getUserMedia({audio:true});
+    audioChunks=[]; recordedBlob=null; hiddenTranscript=""; recordStartedAt=Date.now();
+    mediaRecorder=new MediaRecorder(stream);
+    mediaRecorder.ondataavailable=e=>{if(e.data.size) audioChunks.push(e.data)};
+    mediaRecorder.onstop=()=>{
+      recordedBlob=new Blob(audioChunks,{type:mediaRecorder.mimeType||'audio/webm'});
+      const audio=document.getElementById('recordingPlayback');
+      audio.src=URL.createObjectURL(recordedBlob); audio.style.display='block';
+      stream.getTracks().forEach(t=>t.stop());
+      const seconds=Math.max(1,Math.round((Date.now()-recordStartedAt)/1000));
+      status.innerHTML=`<span class="pass">✓ Recording saved (${seconds} seconds). Listen to your answer below.</span>`;
+      giveSpeakingFeedback(seconds);
+    };
+    mediaRecorder.start();
+    document.getElementById('recordBtn').disabled=true;
+    document.getElementById('stopBtn').disabled=false;
+    status.textContent="🔴 Recording… Speak clearly about the picture.";
+    const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+    if(SR){
+      recognition=new SR(); recognition.lang='en-GB'; recognition.continuous=true; recognition.interimResults=true;
+      recognition.onresult=e=>{
+        let finalText="";
+        for(let i=0;i<e.results.length;i++) if(e.results[i].isFinal) finalText+=e.results[i][0].transcript+" ";
+        if(finalText.trim()) hiddenTranscript=finalText.trim();
+      };
+      try{recognition.start()}catch(e){}
+    }
+  }catch(e){
+    status.innerHTML="<span class='fail'>Microphone permission was not granted. Please allow microphone access in your browser and try again.</span>";
+  }
+}
+function stopRecording(){
+  if(mediaRecorder && mediaRecorder.state!=="inactive") mediaRecorder.stop();
+  if(recognition){try{recognition.stop()}catch(e){}}
+  document.getElementById('recordBtn').disabled=false;
+  document.getElementById('stopBtn').disabled=true;
+}
+function giveSpeakingFeedback(seconds){
+  let feedback=[];
+  if(seconds<20) feedback.push("Speak for longer: aim for about 30–60 seconds.");
+  else feedback.push("Good speaking length.");
+  if(hiddenTranscript){
+    const words=hiddenTranscript.match(/[A-Za-z']+/g)||[];
+    if(words.length<25) feedback.push("Add more picture details and connected sentences.");
+    else feedback.push("Good amount of spoken detail.");
+  }else feedback.push("Your recording is saved. Automatic language analysis may be limited by this browser.");
+  document.getElementById('speechFeedback').innerHTML="<b>Immediate feedback:</b> "+feedback.join(" ");
+}
+function autoSpeakingScore(t){let words=t.toLowerCase().match(/[a-z']+/g)||[];if(!words.length)return 0;let uniq=new Set(words).size, details=["house","home","boy","child","dog","tree","sun","outside","garden","sky"], hits=details.filter(x=>words.includes(x)).length;let sentences=(t.match(/[.!?]+/g)||[]).length;let s=0;s+=Math.min(2,hits*.5);s+=words.length>=45?2:words.length>=25?1.5:words.length>=12?1:0.5;s+=uniq>=30?2:uniq>=18?1.5:uniq>=10?1:.5;s+=/\b(is|are|has|have|can|looks|playing|standing|walking)\b/i.test(t)?2:1;s+=sentences>=3||words.length>=35?2:words.length>=15?1.5:1;return Math.min(10,Math.round(s))}
+function scoreSet(data,key){return data.reduce((n,q,i)=>n+(answers[key][i]===q[2]?1:0),0)}
+function finishTest(){
+if(!recordedBlob){document.getElementById('recordStatus').innerHTML="<span class='fail'><b>Please record and stop your speaking answer before finishing the test.</b></span>";return}
+let gs=scoreSet(grammar,'g'),vs=scoreSet(vocab,'v'),ls=scoreSet(listen,'l');
+let duration=Math.max(1,Math.round((Date.now()-recordStartedAt)/1000));
+let ss=hiddenTranscript?autoSpeakingScore(hiddenTranscript):Math.min(10, duration>=45?8:duration>=30?7:duration>=20?6:duration>=10?4:2);
+let total=gs+vs+ls+ss;showScreen('result');document.getElementById('score').textContent=`${total} / 40`;document.getElementById('status').textContent=total>=24?"PASS — Congratulations!":"Keep practicing and try again.";document.getElementById('status').className=total>=24?'pass':'fail';let speakPass=ss>=6;
+let feedback=speakPass?"Speaking criterion met: 6/10 or higher. Continue improving fluency, vocabulary, grammar accuracy, task completion and clarity.":"Speaking needs improvement. To pass the speaking section, score at least 6/10 by giving relevant details, speaking continuously, using suitable vocabulary and grammar, and speaking clearly.";
+document.getElementById('breakdown').innerHTML=`Grammar: <b>${gs}/10</b> • Vocabulary: <b>${vs}/10</b> • Listening: <b>${ls}/10</b> • Speaking estimate: <b>${ss}/10</b><div class="card" style="text-align:left;margin-top:18px"><b>Speaking feedback</b><p>${feedback}</p><p><b>Speaking pass criterion:</b> 6/10. <b>Overall practice-test pass criterion:</b> 24/40.</p></div>`;
+if(total>=24){document.getElementById('certWrap').innerHTML=`<div class="certificate"><div class="small">MINDPROO</div><h2>Certificate of Appreciation</h2><p>This certificate is proudly presented to</p><h2>${escapeHtml(document.getElementById('name').value)}</h2><p>of <b>${escapeHtml(document.getElementById('school').value)}</b></p><p>for successfully completing the <b>AI IELTS for UKVI Practice Test</b></p><p>Final Score: <b>${total}/40</b></p><p>Date: 16 September 2026</p><div class="sig">Mindproo</div><div class="small">Signature</div><p class="small">Practice certificate only — not an official IELTS or UKVI qualification.</p></div>`;document.getElementById('printBtn').style.display='inline-block'}}
+function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}
+</script>
+</body></html>
